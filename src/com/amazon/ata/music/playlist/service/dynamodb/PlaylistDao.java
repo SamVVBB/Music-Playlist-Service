@@ -3,6 +3,7 @@ package com.amazon.ata.music.playlist.service.dynamodb;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
 
+import com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 /**
@@ -34,5 +35,15 @@ public class PlaylistDao {
         }
 
         return playlist;
+    }
+
+
+    public Playlist savePlaylist(Playlist playlist) {
+
+        dynamoDbMapper.save(playlist);
+
+        return playlist;
+
+
     }
 }

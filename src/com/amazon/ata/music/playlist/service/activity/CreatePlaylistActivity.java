@@ -1,14 +1,22 @@
 package com.amazon.ata.music.playlist.service.activity;
 
+import com.amazon.ata.music.playlist.service.converters.ModelConverter;
+import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeValueException;
 import com.amazon.ata.music.playlist.service.models.requests.CreatePlaylistRequest;
 import com.amazon.ata.music.playlist.service.models.results.CreatePlaylistResult;
 import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
+import com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Implementation of the CreatePlaylistActivity for the MusicPlaylistService's CreatePlaylist API.
@@ -45,8 +53,37 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
     public CreatePlaylistResult handleRequest(final CreatePlaylistRequest createPlaylistRequest, Context context) {
         log.info("Received CreatePlaylistRequest {}", createPlaylistRequest);
 
+        boolean isValidName = MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getName());
+        boolean isValidId = MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getCustomerId());
+
+        if (isValidName == false || isValidId == false) {
+            throw new InvalidAttributeValueException("Name or ID is invalid");
+        }
+
+        String playlistId = MusicPlaylistServiceUtils.generatePlaylistId();
+        Set<String> playlistTags = null;
+        if (createPlaylistRequest.getTags() != null) {
+            playlistTags = new HashSet<>(createPlaylistRequest.getTags());
+        }
+
+        Playlist playlist = new Playlist();
+        playlist.setName(createPlaylistRequest.getName());
+        playlist.setCustomerId(createPlaylistRequest.getCustomerId());
+        playlist.setId(playlistId);
+        playlist.setTags(playlistTags);
+        playlist.setSongCount(0);
+        playlist.setSongList(new ArrayList<>());
+
+
+        playlistDao.savePlaylist(playlist);
+
+        ModelConverter modelConverter = new ModelConverter();
+
+        PlaylistModel playlistModel = modelConverter.toPlaylistModel(playlist);
+
+
         return CreatePlaylistResult.builder()
-                .withPlaylist(new PlaylistModel())
+                .withPlaylist(playlistModel)
                 .build();
     }
 }
