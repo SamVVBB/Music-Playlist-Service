@@ -37,8 +37,11 @@ dynamoDbMapper : DynamoDBMapper
 getPlaylist(String) : Playlist
 }
 class AlbumTrackNotFoundException
-class InvalidAttributeValueException
 class PlaylistNotFoundException
+class AttributeException
+class InvalidAttributeValueException
+class InvalidAttributeChangeException
+
 
 Playlist -> AlbumTrack
 AddSongToPlaylistActivity -> AlbumTrackDao
@@ -47,5 +50,7 @@ AddSongToPlaylistActivity -> PlaylistDao
 GetPlaylistActivity -> PlaylistDao
 GetPlaylistSongsActivity -> PlaylistDao
 UpdatePlaylistActivity -> PlaylistDao
+InvalidAttributeChangeException --|> AttributeException
+InvalidAttributeValueException --|> AttributeException
 
 @enduml
