@@ -81,6 +81,15 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
             throw new AlbumTrackNotFoundException();
         }
 
+
+
+//        if (addSongToPlaylistRequest.isQueueNext()) {
+//            playlist.getSongList().addFirst(albumTrack);
+//        } else {
+//            playlist.getSongList().addLast(albumTrack);
+//        }
+        playlist.getSongList().add(albumTrack);
+
         playlist.setSongCount(playlist.getSongCount() + 1);
 
         playlist = playlistDao.savePlaylist(playlist);

@@ -66,10 +66,7 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
         }
 
 
-//        List<SongModel> tempList = new LinkedList<SongModel>();
-
         songModelList = modelConverter.toSongModelList(playlist.getSongList());
-//        songModelList = modelConverter.toSongModelList(tempList);
 
 
         return GetPlaylistSongsResult.builder()

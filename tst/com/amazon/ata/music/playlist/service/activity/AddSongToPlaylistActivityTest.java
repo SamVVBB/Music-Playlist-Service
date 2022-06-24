@@ -35,39 +35,39 @@ public class AddSongToPlaylistActivityTest {
         initMocks(this);
         addSongToPlaylistActivity = new AddSongToPlaylistActivity(playlistDao, albumTrackDao);
     }
-//
-//    @Test
-//    void handleRequest_validRequest_addsSongToEndOfPlaylist() {
-//        // GIVEN
-//        // a non-empty playlist
-//        Playlist originalPlaylist = PlaylistTestHelper.generatePlaylist();
-//        String playlistId = originalPlaylist.getId();
-//
-//        // the new song to add to the playlist
-//        AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(2);
-//        String addedAsin = albumTrackToAdd.getAsin();
-//        int addedTracknumber = albumTrackToAdd.getTrackNumber();
-//
-//        when(playlistDao.getPlaylist(playlistId)).thenReturn(originalPlaylist);
-//        when(playlistDao.savePlaylist(originalPlaylist)).thenReturn(originalPlaylist);
-//        when(albumTrackDao.getAlbumTrack(addedAsin, addedTracknumber)).thenReturn(albumTrackToAdd);
-//
-//        AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
-//            .withId(playlistId)
-//            .withAsin(addedAsin)
-//            .withTrackNumber(addedTracknumber)
-//            .build();
-//
-//        // WHEN
-//        AddSongToPlaylistResult result = addSongToPlaylistActivity.handleRequest(request, null);
-//
-//        // THEN
-//        verify(playlistDao).savePlaylist(originalPlaylist);
-//
-//        assertEquals(2, result.getSongList().size());
-//        SongModel secondSong = result.getSongList().get(1);
-//        AlbumTrackTestHelper.assertAlbumTrackEqualsSongModel(albumTrackToAdd, secondSong);
-//    }
+
+    @Test
+    void handleRequest_validRequest_addsSongToEndOfPlaylist() {
+        // GIVEN
+        // a non-empty playlist
+        Playlist originalPlaylist = PlaylistTestHelper.generatePlaylist();
+        String playlistId = originalPlaylist.getId();
+
+        // the new song to add to the playlist
+        AlbumTrack albumTrackToAdd = AlbumTrackTestHelper.generateAlbumTrack(2);
+        String addedAsin = albumTrackToAdd.getAsin();
+        int addedTracknumber = albumTrackToAdd.getTrackNumber();
+
+        when(playlistDao.getPlaylist(playlistId)).thenReturn(originalPlaylist);
+        when(playlistDao.savePlaylist(originalPlaylist)).thenReturn(originalPlaylist);
+        when(albumTrackDao.getAlbumTrack(addedAsin, addedTracknumber)).thenReturn(albumTrackToAdd);
+
+        AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
+            .withId(playlistId)
+            .withAsin(addedAsin)
+            .withTrackNumber(addedTracknumber)
+            .build();
+
+        // WHEN
+        AddSongToPlaylistResult result = addSongToPlaylistActivity.handleRequest(request, null);
+
+        // THEN
+        verify(playlistDao).savePlaylist(originalPlaylist);
+
+        assertEquals(2, result.getSongList().size());
+        SongModel secondSong = result.getSongList().get(1);
+        AlbumTrackTestHelper.assertAlbumTrackEqualsSongModel(albumTrackToAdd, secondSong);
+    }
 
     @Test
     public void handleRequest_noMatchingPlaylistId_throwsPlaylistNotFoundException() {
