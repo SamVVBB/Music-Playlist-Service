@@ -14,6 +14,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,7 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
      *
      * @param playlistDao PlaylistDao to access the playlists table.
      */
+    @Inject
     public CreatePlaylistActivity(PlaylistDao playlistDao) {
         this.playlistDao = playlistDao;
     }
@@ -74,13 +76,10 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
         playlist.setSongCount(0);
         playlist.setSongList(new ArrayList<>());
 
-
         playlistDao.savePlaylist(playlist);
 
         ModelConverter modelConverter = new ModelConverter();
-
         PlaylistModel playlistModel = modelConverter.toPlaylistModel(playlist);
-
 
         return CreatePlaylistResult.builder()
                 .withPlaylist(playlistModel)

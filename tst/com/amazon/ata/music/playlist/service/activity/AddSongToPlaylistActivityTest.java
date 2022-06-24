@@ -1,40 +1,40 @@
-//package com.amazon.ata.music.playlist.service.activity;
-//
-//import com.amazon.ata.music.playlist.service.dynamodb.AlbumTrackDao;
-//import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
-//import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
-//import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
-//import com.amazon.ata.music.playlist.service.exceptions.AlbumTrackNotFoundException;
-//import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
-//import com.amazon.ata.music.playlist.service.models.SongModel;
-//import com.amazon.ata.music.playlist.service.models.requests.AddSongToPlaylistRequest;
-//import com.amazon.ata.music.playlist.service.models.results.AddSongToPlaylistResult;
-//import com.amazon.ata.music.playlist.service.helpers.AlbumTrackTestHelper;
-//import com.amazon.ata.music.playlist.service.helpers.PlaylistTestHelper;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.Mock;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertThrows;
-//import static org.mockito.Mockito.verify;
-//import static org.mockito.Mockito.when;
-//import static org.mockito.MockitoAnnotations.initMocks;
-//
-//public class AddSongToPlaylistActivityTest {
-//    @Mock
-//    private PlaylistDao playlistDao;
-//
-//    @Mock
-//    private AlbumTrackDao albumTrackDao;
-//
-//    private AddSongToPlaylistActivity addSongToPlaylistActivity;
-//
-//    @BeforeEach
-//    private void setup() {
-//        initMocks(this);
-//        addSongToPlaylistActivity = new AddSongToPlaylistActivity(playlistDao, albumTrackDao);
-//    }
+package com.amazon.ata.music.playlist.service.activity;
+
+import com.amazon.ata.music.playlist.service.dynamodb.AlbumTrackDao;
+import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
+import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
+import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.exceptions.AlbumTrackNotFoundException;
+import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
+import com.amazon.ata.music.playlist.service.models.SongModel;
+import com.amazon.ata.music.playlist.service.models.requests.AddSongToPlaylistRequest;
+import com.amazon.ata.music.playlist.service.models.results.AddSongToPlaylistResult;
+import com.amazon.ata.music.playlist.service.helpers.AlbumTrackTestHelper;
+import com.amazon.ata.music.playlist.service.helpers.PlaylistTestHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
+public class AddSongToPlaylistActivityTest {
+    @Mock
+    private PlaylistDao playlistDao;
+
+    @Mock
+    private AlbumTrackDao albumTrackDao;
+
+    private AddSongToPlaylistActivity addSongToPlaylistActivity;
+
+    @BeforeEach
+    private void setup() {
+        initMocks(this);
+        addSongToPlaylistActivity = new AddSongToPlaylistActivity(playlistDao, albumTrackDao);
+    }
 //
 //    @Test
 //    void handleRequest_validRequest_addsSongToEndOfPlaylist() {
@@ -68,43 +68,43 @@
 //        SongModel secondSong = result.getSongList().get(1);
 //        AlbumTrackTestHelper.assertAlbumTrackEqualsSongModel(albumTrackToAdd, secondSong);
 //    }
-//
-//    @Test
-//    public void handleRequest_noMatchingPlaylistId_throwsPlaylistNotFoundException() {
-//        // GIVEN
-//        String playlistId = "missing id";
-//        AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
-//                                               .withId(playlistId)
-//                                               .withAsin("asin")
-//                                               .withTrackNumber(1)
-//                                               .build();
-//        when(playlistDao.getPlaylist(playlistId)).thenThrow(new PlaylistNotFoundException());
-//
-//        // WHEN + THEN
-//        assertThrows(PlaylistNotFoundException.class, () -> addSongToPlaylistActivity.handleRequest(request, null));
-//    }
-//
-//    @Test
-//    public void handleRequest_noMatchingAlbumTrack_throwsAlbumTrackNotFoundException() {
-//        // GIVEN
-//        Playlist playlist = PlaylistTestHelper.generatePlaylist();
-//        String playlistId = playlist.getId();
-//        String asin = "nonexistent asin";
-//        int trackNumber = -1;
-//        AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
-//                                               .withId(playlistId)
-//                                               .withAsin(asin)
-//                                               .withTrackNumber(trackNumber)
-//                                               .build();
-//
-//        // WHEN
-//        when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
-//        when(albumTrackDao.getAlbumTrack(asin, trackNumber)).thenThrow(new AlbumTrackNotFoundException());
-//
-//        // THEN
-//        assertThrows(AlbumTrackNotFoundException.class, () -> addSongToPlaylistActivity.handleRequest(request, null));
-//    }
-//
+
+    @Test
+    public void handleRequest_noMatchingPlaylistId_throwsPlaylistNotFoundException() {
+        // GIVEN
+        String playlistId = "missing id";
+        AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
+                                               .withId(playlistId)
+                                               .withAsin("asin")
+                                               .withTrackNumber(1)
+                                               .build();
+        when(playlistDao.getPlaylist(playlistId)).thenThrow(new PlaylistNotFoundException());
+
+        // WHEN + THEN
+        assertThrows(PlaylistNotFoundException.class, () -> addSongToPlaylistActivity.handleRequest(request, null));
+    }
+
+    @Test
+    public void handleRequest_noMatchingAlbumTrack_throwsAlbumTrackNotFoundException() {
+        // GIVEN
+        Playlist playlist = PlaylistTestHelper.generatePlaylist();
+        String playlistId = playlist.getId();
+        String asin = "nonexistent asin";
+        int trackNumber = -1;
+        AddSongToPlaylistRequest request = AddSongToPlaylistRequest.builder()
+                                               .withId(playlistId)
+                                               .withAsin(asin)
+                                               .withTrackNumber(trackNumber)
+                                               .build();
+
+        // WHEN
+        when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
+        when(albumTrackDao.getAlbumTrack(asin, trackNumber)).thenThrow(new AlbumTrackNotFoundException());
+
+        // THEN
+        assertThrows(AlbumTrackNotFoundException.class, () -> addSongToPlaylistActivity.handleRequest(request, null));
+    }
+
 //    @Test
 //    void handleRequest_validRequestWithQueueNextFalse_addsSongToEndOfPlaylist() {
 //        // GIVEN
@@ -172,4 +172,4 @@
 //        SongModel firstSong = result.getSongList().get(0);
 //        AlbumTrackTestHelper.assertAlbumTrackEqualsSongModel(albumTrackToAdd, firstSong);
 //    }
-//}
+}

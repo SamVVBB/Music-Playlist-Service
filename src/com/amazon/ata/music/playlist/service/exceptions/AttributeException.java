@@ -1,6 +1,6 @@
 package com.amazon.ata.music.playlist.service.exceptions;
 
-public class AttributeException extends RuntimeException{
+public class AttributeException extends RuntimeException {
 
     private static final long serialVersionUID = -7718695886295024481L;
 
