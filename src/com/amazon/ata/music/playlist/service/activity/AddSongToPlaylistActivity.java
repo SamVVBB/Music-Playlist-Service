@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -67,43 +68,34 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
 
         Playlist playlist;
         AlbumTrack albumTrack;
-        List<SongModel> songModelList = new ArrayList<>();
+        List<SongModel> songModelList;
 
         try {
             playlist = playlistDao.getPlaylist(addSongToPlaylistRequest.getId());
-        } catch (NullPointerException e) {
-            throw new PlaylistNotFoundException();
+        } catch (PlaylistNotFoundException e) {
+            throw new PlaylistNotFoundException(e.getMessage());
         }
 
         try {
             albumTrack = albumTrackDao.getAlbumTrack(addSongToPlaylistRequest.getAsin(), addSongToPlaylistRequest.getTrackNumber());
-        } catch (NullPointerException e) {
-            throw new AlbumTrackNotFoundException();
+        } catch (AlbumTrackNotFoundException e) {
+            throw new AlbumTrackNotFoundException(e.getMessage());
         }
 
+        LinkedList<AlbumTrack> songList = (LinkedList<AlbumTrack>) playlist.getSongList();
 
-
-//        if (addSongToPlaylistRequest.isQueueNext()) {
-//            playlist.getSongList().addFirst(albumTrack);
-//        } else {
-//            playlist.getSongList().addLast(albumTrack);
-//        }
-        playlist.getSongList().add(albumTrack);
+        if (addSongToPlaylistRequest.isQueueNext()) {
+            songList.addFirst(albumTrack);
+        } else {
+            songList.addLast(albumTrack);
+        }
 
         playlist.setSongCount(playlist.getSongCount() + 1);
+        playlist.setSongList(songList);
 
         playlist = playlistDao.savePlaylist(playlist);
 
-        for (AlbumTrack song : playlist.getSongList()) {
-            SongModel songModel = modelConverter.toSongModel(song);
-            songModel.setAsin(albumTrack.getAsin());
-            songModel.setTrackNumber(albumTrack.getTrackNumber());
-            song.setAlbumName(albumTrack.getAlbumName());
-            songModel.setTitle(albumTrack.getSongTitle());
-
-
-            songModelList.add(songModel);
-        }
+        songModelList = modelConverter.toSongModelList(playlist.getSongList());
 
 
         return AddSongToPlaylistResult.builder()

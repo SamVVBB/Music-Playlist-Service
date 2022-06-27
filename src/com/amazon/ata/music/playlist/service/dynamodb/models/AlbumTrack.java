@@ -2,6 +2,7 @@ package com.amazon.ata.music.playlist.service.dynamodb.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 /**
@@ -23,7 +24,7 @@ public class AlbumTrack {
         this.asin = asin;
     }
 
-    @DynamoDBAttribute(attributeName = "track_number")
+    @DynamoDBRangeKey(attributeName = "track_number")
     public int getTrackNumber() {
         return trackNumber;
     }

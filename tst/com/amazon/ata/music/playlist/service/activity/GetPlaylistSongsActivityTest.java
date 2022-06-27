@@ -90,26 +90,26 @@ public class GetPlaylistSongsActivityTest {
         AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(playlist.getSongList(), result.getSongList());
     }
 
-//    @Test
-//    void handleRequest_withReversedSongOrder_returnsReversedPlaylistSongs() {
-//        // GIVEN
-//        Playlist playlist = PlaylistTestHelper.generatePlaylistWithNAlbumTracks(9);
-//        String playlistId = playlist.getId();
-//        List<AlbumTrack> reversedAlbumTracks = new LinkedList<>(playlist.getSongList());
-//        Collections.reverse(reversedAlbumTracks);
-//
-//        GetPlaylistSongsRequest request = GetPlaylistSongsRequest.builder()
-//                                              .withId(playlistId)
-//                                              .withOrder(SongOrder.REVERSED)
-//                                              .build();
-//        when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
-//
-//        // WHEN
-//        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request, null);
-//
-//        // THEN
-//        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(reversedAlbumTracks, result.getSongList());
-//    }
+    @Test
+    void handleRequest_withReversedSongOrder_returnsReversedPlaylistSongs() {
+        // GIVEN
+        Playlist playlist = PlaylistTestHelper.generatePlaylistWithNAlbumTracks(9);
+        String playlistId = playlist.getId();
+        List<AlbumTrack> reversedAlbumTracks = new LinkedList<>(playlist.getSongList());
+        Collections.reverse(reversedAlbumTracks);
+
+        GetPlaylistSongsRequest request = GetPlaylistSongsRequest.builder()
+                                              .withId(playlistId)
+                                              .withOrder(SongOrder.REVERSED)
+                                              .build();
+        when(playlistDao.getPlaylist(playlistId)).thenReturn(playlist);
+
+        // WHEN
+        GetPlaylistSongsResult result = getPlaylistSongsActivity.handleRequest(request, null);
+
+        // THEN
+        AlbumTrackTestHelper.assertAlbumTracksEqualSongModels(reversedAlbumTracks, result.getSongList());
+    }
 
     @Test
     void handleRequest_withShuffledSongOrder_returnsSongsInAnyOrder() {

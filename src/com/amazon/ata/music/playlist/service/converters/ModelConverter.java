@@ -42,17 +42,11 @@ public class ModelConverter {
                 .build();
     }
 
-    public LinkedList<SongModel> toSongModelList(List<AlbumTrack> songList) {
-        LinkedList<SongModel> songModelList = new LinkedList<>();
+    public List<SongModel> toSongModelList(List<AlbumTrack> songList) {
+        List<SongModel> songModelList = new ArrayList<>();
 
         for (AlbumTrack track : songList) {
-            SongModel songModel = toSongModel(track);
-            songModel.setAsin(track.getAsin());
-            songModel.setTrackNumber(track.getTrackNumber());
-            track.setAlbumName(track.getAlbumName());
-            songModel.setTitle(track.getSongTitle());
-
-            songModelList.add(songModel);
+            songModelList.add(toSongModel(track));
         }
         return songModelList;
     }
